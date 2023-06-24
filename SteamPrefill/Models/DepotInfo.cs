@@ -49,7 +49,6 @@
         {
             DepotId = uint.Parse(rootKey.Name);
             Name = rootKey["name"].Value;
-            BranchName = rootKey["branch"];
             _originalAppId = appId;
 
             ManifestId = rootKey["manifests"]["public"]["gid"].AsUnsignedLongNullable();
