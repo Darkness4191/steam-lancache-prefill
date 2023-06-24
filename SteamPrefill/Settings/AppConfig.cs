@@ -79,6 +79,11 @@ namespace SteamPrefill.Settings
         /// </summary>
         public static readonly string SuccessfullyDownloadedDepotsPath = Path.Combine(ConfigDir, "successfullyDownloadedDepots.json");
 
+        /// <summary>
+        /// Keeps track of app branches that should differ from the public branch to download f.e to a specific beta
+        /// </summary>
+        public static readonly string UserSelectedBranches = Path.Combine(ConfigDir, "selectedBranchesToPrefill.json");
+
         //TODO comment
         public static readonly string CachedCellIdPath = Path.Combine(CacheDir, "cellId.txt");
 

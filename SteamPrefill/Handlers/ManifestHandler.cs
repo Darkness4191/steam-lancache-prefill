@@ -16,12 +16,23 @@
 
         private const int MaxRetries = 3;
 
+        /// <summary>
+        /// Keeps track of app branches that should differ from the public branch to download f.e to a specific beta
+        /// </summary>
+        private readonly Dictionary<uint, string> _branchesToDownload = new Dictionary<uint, string>();
+
         public ManifestHandler(IAnsiConsole ansiConsole, CdnPool cdnPool, Steam3Session steam3Session, DownloadArguments downloadArguments)
         {
             _ansiConsole = ansiConsole;
             _cdnPool = cdnPool;
             _steam3Session = steam3Session;
             _downloadArguments = downloadArguments;
+
+            if (File.Exists(AppConfig.UserSelectedBranches))
+            {
+                var fileContents = File.ReadAllText(AppConfig.UserSelectedBranches);
+                _branchesToDownload = JsonSerializer.Deserialize<Dictionary<uint, string>>(fileContents);
+            }
         }
 
         /// <summary>
@@ -140,7 +151,14 @@
         /// <exception cref="ManifestException">Throws if no valid manifest code was found</exception>
         private async Task<ManifestRequestCode> GetManifestRequestCodeAsync(DepotInfo depot)
         {
-            ulong manifestRequestCode = await _steam3Session.SteamContent.GetManifestRequestCode(depot.DepotId, depot.ContainingAppId, depot.ManifestId.Value, "public");
+            string branchName = "public";
+
+            if (_branchesToDownload.ContainsKey(depot.ContainingAppId))
+            {
+                branchName = _branchesToDownload[depot.ContainingAppId];
+            }
+
+            ulong manifestRequestCode = await _steam3Session.SteamContent.GetManifestRequestCode(depot.DepotId, depot.ContainingAppId, depot.ManifestId.Value, branchName);
 
             // If we could not get the manifest code, this is a fatal error, as it we can't download the manifest without it.
             if (manifestRequestCode == 0)
