@@ -134,7 +134,7 @@
         /// <returns></returns>
         public async Task<List<QueuedRequest>> BuildChunkDownloadQueueAsync(List<DepotInfo> depots)
         {
-            var depotManifests = await _manifestHandler.GetAllManifestsAsync(depots, _branchesToDownload);
+            var depotManifests = await _manifestHandler.GetAllManifestsAsync(depots);
 
             // Queueing up chunks for each depot
             var chunkQueue = new List<QueuedRequest>();
