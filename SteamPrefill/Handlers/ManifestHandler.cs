@@ -19,7 +19,7 @@
         /// <summary>
         /// Keeps track of app branches that should differ from the public branch to download f.e to a specific beta
         /// </summary>
-        private readonly Dictionary<uint, string> _branchesToDownload = new Dictionary<uint, string>();
+        private Dictionary<uint, string> _branchesToDownload;
 
         public ManifestHandler(IAnsiConsole ansiConsole, CdnPool cdnPool, Steam3Session steam3Session, DownloadArguments downloadArguments)
         {
